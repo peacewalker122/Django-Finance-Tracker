@@ -35,11 +35,11 @@ INSTALLED_APPS = [
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
-    
+    "django_filters",
+
     # project apps
     "tracker",
-    
-    
+
 ]
 
 SITE_ID = 1
