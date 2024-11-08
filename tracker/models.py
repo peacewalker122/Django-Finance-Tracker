@@ -1,7 +1,7 @@
-from black.trans import TResult
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-from django.db.models import CharField
+
+from tracker.managers import TransactionQuerySet
 
 
 class User(AbstractUser):
@@ -26,6 +26,8 @@ class Transaction(models.Model):
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     type = models.CharField(max_length=20, choices=TRANSACTION_CHOICES)
     date = models.DateField()
+
+    objects = TransactionQuerySet.as_manager()
 
     def __str__(self):
         return f"{self.type} of {self.amount} on {self.date} by {self.user}"
