@@ -13,6 +13,10 @@
     <div class="mb-2 form-control text-black">
         {{ form.amount|add_label_class:"label text-white" }}
         {% render_field form.amount class='input' %}
+        
+        {% for error in form.amount.errors %}
+        	<p class="text-red mt-1">{{ error }}</p>
+        {% endfor %}
     </div>
 
     <div class="mb-2 form-control text-black">
@@ -24,7 +28,16 @@
         {% render_field form.category class='text-white' %}
     </div>
 
-    <button class="btn btn-success">
-        Submit
-    </button>
+    <div class="flex justify-between">
+        <button class="btn btn-success">
+            Submit
+        </button>
+
+        <button class="btn btn-error"
+        hx-get="{% url 'transactions-list' %}"
+        hx-target="#transaction-block"
+        hx-push-url='/transactions'>
+            Cancel
+        </button>
+    </div>
 </form>
