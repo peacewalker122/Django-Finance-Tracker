@@ -1,0 +1,6 @@
+{
+  "typeCheckingMode": "basic",  // Change to "off" to disable type checking
+  "reportMissingImports": "none",  // Hides warnings about missing imports
+  "reportUnusedVariable": "none",  // Hides warnings about unused variables
+  "reportUnnecessaryTypeIgnoreComment": "none"  // Hides unnecessary `type: ignore` warnings
+}

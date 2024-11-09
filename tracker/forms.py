@@ -1,5 +1,5 @@
 from django import forms
-
+from django.views.generic.edit import UpdateView
 from tracker.models import Transaction, Category
 
 
@@ -27,3 +27,9 @@ class TransactionForm(forms.ModelForm):
         widgets = {
             'date': forms.DateInput(attrs={'type': 'date'}),
         }
+
+class TransactionFormUpdate(UpdateView):
+    model = Transaction
+    form_class = TransactionForm
+    template_name = '/tracker/partials/transactions-update.html'
+    success_url = 'transactions/'
