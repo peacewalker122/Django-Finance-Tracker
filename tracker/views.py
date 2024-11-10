@@ -66,14 +66,24 @@ def create_transaction(request):
 
 
 @login_required  # type: ignore
+# WARN: Issue data weren't saved/updated
 def update_transaction(request, id):
     instance = get_object_or_404(Transaction, pk=id)
     if request.method == "PATCH":
         form = TransactionForm()
 
         if form.is_valid():
-            form.save(commit=True)
-            return HttpResponse("Success", status=200)
+            transastion = form.save(commit=False)
+            transastion.save()
+            context = {"message": "Transaction created"}
+            return render(request, "tracker/partials/update-transactions.html", context)
+        else:
+            context = {"form": form, "instance": instance}
+            response = render(
+                request, "tracker/partials/update-transactions.html", context
+            )
+            return retarget(response, "#transactions_modal_content")
+
     else:
         form = TransactionForm(instance=instance)
 

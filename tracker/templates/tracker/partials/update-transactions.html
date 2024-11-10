@@ -1,11 +1,15 @@
 {% load widget_tweaks %}
 
-<h2>Update Form</h2>
-<form method="post" hx-patch="{% url 'update-transaction' instance.id %}" hx-target="#transactions-modal">
+<h2 class="text-2xl text-white">Update Form</h2>
+<form hx-patch="{% url 'update-transaction' instance.id %}" class="mt-4">
 
     <div class="mb-2 form-control text-black">
         {{ form.type|add_label_class:"label text-white" }}
         {% render_field form.type class='input' %}
+
+        {% for error in form.type.errors %}
+        	<p class="text-red mt-1">{{ error }}</p>
+        {% endfor %}
     </div>
 
     <div class="mb-2 form-control text-black">
@@ -20,15 +24,22 @@
     <div class="mb-2 form-control text-black">
         {{ form.date|add_label_class:"label text-white" }}
         {% render_field form.date class='input' %}
+
+        {% for error in form.date.errors %}
+        	<p class="text-red mt-1">{{ error }}</p>
+        {% endfor %}
     </div>
 
     <div class="mb-2 form-control text-black">
         {% render_field form.category class='text-white' %}
+
+        {% for error in form.category.errors %}
+        	<p class="text-red mt-1">{{ error }}</p>
+        {% endfor %}
     </div>
 
     <div class="flex justify-between mt-4">
         <button type="submit" class="btn btn-success">Save</button>
         <button type="button" class="btn btn-error" onclick="transactions-modal.showModal()">Cancel</button>
     </div>
-            
 </form>

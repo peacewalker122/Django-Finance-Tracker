@@ -4,7 +4,7 @@
     Create Transactions
 </h1>
 
-<form hx-post="{% url 'create-transaction' %}">
+<form hx-post="{% url 'create-transaction' %}" hx-target="#transactions_modal_content">
     <div class="mb-2 form-control text-black">
         {{ form.type|add_label_class:"label text-white" }}
         {% render_field form.type class='input' %}
