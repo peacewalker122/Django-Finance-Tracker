@@ -1,6 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect
+from django.views.decorators.http import require_http_methods
 from django.shortcuts import render
 from django_htmx.http import retarget
 
@@ -66,17 +67,16 @@ def create_transaction(request):
 
 
 @login_required  # type: ignore
-# WARN: Issue data weren't saved/updated
 def update_transaction(request, id):
-    instance = get_object_or_404(Transaction, pk=id)
-    if request.method == "PATCH":
-        form = TransactionForm()
+    instance = get_object_or_404(Transaction, pk=id, user=request.user)
+    if request.method == "POST":
+        form = TransactionForm(request.POST, instance=instance)
 
         if form.is_valid():
             transastion = form.save(commit=False)
             transastion.save()
-            context = {"message": "Transaction created"}
-            return render(request, "tracker/partials/update-transactions.html", context)
+
+            return HttpResponse("Transaction updated")
         else:
             context = {"form": form, "instance": instance}
             response = render(
@@ -93,3 +93,14 @@ def update_transaction(request, id):
     }
 
     return render(request, "tracker/partials/update-transactions.html", context)
+
+
+@login_required  # type: ignore
+@require_http_methods(["DELETE"])
+def delete_transaction(request, id):
+    transaction = get_object_or_404(Transaction, pk=id, user=request.user)
+    transaction.delete()
+
+    context = {"message": "Transaction deleted"}
+
+    return render(request, "tracker/partials/transactions-success.html", context)

@@ -68,6 +68,17 @@
                                 Edit
                             </button>
                          </td>
+                        <td>
+                            <button 
+                              class="btn btn-error" 
+                              hx-delete="{% url 'delete-transaction' transaction.id %}" 
+                              hx-target="#transaction-block" 
+                              hx-push-url="true"
+                              hx-confirm="Are you sure you want to delete this transaction?"
+                            >
+                              Delete
+                            </button>
+                        </td>
                     </tr>
                 {% endfor %}
                 </tbody>

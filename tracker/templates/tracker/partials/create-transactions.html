@@ -4,7 +4,7 @@
     Create Transactions
 </h1>
 
-<form hx-post="{% url 'create-transaction' %}" hx-target="#transactions_modal_content">
+<form hx-post="{% url 'create-transaction' %}" hx-target="#transaction-block">
     <div class="mb-2 form-control text-black">
         {{ form.type|add_label_class:"label text-white" }}
         {% render_field form.type class='input' %}
@@ -28,16 +28,16 @@
         {% render_field form.category class='text-white' %}
     </div>
 
-    <div class="flex justify-between">
-        <button class="btn btn-success">
-            Submit
-        </button>
-
+    <div class="flex justify-between mt-12">
         <button class="btn btn-error"
         hx-get="{% url 'transactions-list' %}"
         hx-target="#transaction-block"
         hx-push-url='/transactions'>
             Cancel
+        </button>
+
+        <button class="btn btn-success">
+            Submit
         </button>
     </div>
 </form>
