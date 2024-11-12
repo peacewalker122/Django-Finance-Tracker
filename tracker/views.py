@@ -1,10 +1,12 @@
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect
+from django.core.paginator import Paginator
 from django.views.decorators.http import require_http_methods
 from django.shortcuts import render
 from django_htmx.http import retarget
 
+from finance_project import settings
 from tracker.filter import TransactionFilter
 from tracker.forms import TransactionForm
 from tracker.models import Transaction
@@ -24,18 +26,29 @@ def transaction_list(request):
         ),
     )
 
+    print(transactions.qs.query)
+
+    paginator = Paginator(transactions.qs, settings.PAGE_SIZE)
+    transaction_page = paginator.page(1)  # by default return the first page
+
     expenses = transactions.queryset.get_total_expense()
     income = transactions.queryset.get_total_income()
     net_income = income - expenses
 
     context = {
+        "transactions": transaction_page,
         "filter": transactions,
         "expense": expenses,
         "income": income,
         "net_income": net_income,
     }
+
     if request.htmx:
-        return render(request, "tracker/partials/transactions-container.html", context)
+        return render(
+            request,
+            "tracker/partials/transactions-container.html",
+            context,
+        )
 
     return render(request, "tracker/transactions-list.html", context)
 
@@ -104,3 +117,25 @@ def delete_transaction(request, id):
     context = {"message": "Transaction deleted"}
 
     return render(request, "tracker/partials/transactions-success.html", context)
+
+
+@login_required  # type: ignore
+def get_transaction(request):
+    transactions = TransactionFilter(
+        request.GET,
+        queryset=Transaction.objects.filter(user=request.user).select_related(
+            "category"
+        ),
+    )
+    page: int = request.GET.get("page", 1)
+    paginator = Paginator(transactions.qs, settings.PAGE_SIZE)
+
+    context = {
+        "transactions": paginator.page(page),
+    }
+
+    return render(
+        request,
+        "tracker/partials/transactions-container.html#transactions-list",
+        context,
+    )

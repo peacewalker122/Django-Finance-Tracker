@@ -1,4 +1,5 @@
 {% load widget_tweaks %}
+{% load partials %}
 
 <div class="flex flex-col-reverse md:grid md:grid-cols-4 gap-4" id="transactions-container">
     <div class="col-span-3">
@@ -41,7 +42,7 @@
             </div>
         </dialog>
 
-        {% if filter.qs %}
+        {% if transactions %}
             <table class="table p-12">
                 <thead class="text-xl text-white uppercase">
                 <tr>
@@ -53,20 +54,28 @@
                 </thead>
 
                 <tbody>
-                {% for transaction in filter.qs %}
-                    <tr>
-                        <td>{{ transaction.date }}</td>
-                        <td>{{ transaction.category }}</td>
-                        <td>{{ transaction.type }}</td>
-                        <td>{{ transaction.amount }}</td>
-                        <td> 
-                            <button
+                  {% partialdef transactions-list inline=True %}
+                    {% for transaction in transactions %}
+                      {% if forloop.last and transactions.has_next  %}
+                        <tr hx-get="{% url 'get-transaction' %}?page={{ transactions.next_page_number }}"
+                              hx-trigger="revealed"
+                              hx-swap="afterend"
+                              hx-include="#filterform">  
+                      {% else %}
+                        <tr>
+                      {% endif %}
+                          <td>{{ transaction.date }}</td>
+                          <td>{{ transaction.category }}</td>
+                          <td>{{ transaction.type }}</td>
+                          <td>{{ transaction.amount }}</td>
+                          <td> 
+                              <button
                                 class="btn btn-info"
                                 hx-get="{% url 'update-transaction' transaction.id %}" 
                                 hx-target="#transactions_modal_content"
                                 onclick="transactions_modal.showModal()">
                                 Edit
-                            </button>
+                              </button>
                          </td>
                         <td>
                             <button 
@@ -80,7 +89,8 @@
                             </button>
                         </td>
                     </tr>
-                {% endfor %}
+                  {% endfor %}
+                {% endpartialdef %}
                 </tbody>
             </table>
         {% else %}
@@ -92,7 +102,8 @@
     <div class="col-span-1">
         <form hx-get="{% url 'transactions-list' %}"
               hx-target="#transactions-container"
-              hx-swap="outerHTML">
+              hx-swap="outerHTML"
+              id="filterform">
 
             <div class="mb-2 form-control">
                 {{ filter.form.transaction_type|add_label_class:"label text-white" }}

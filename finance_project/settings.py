@@ -24,23 +24,21 @@ INSTALLED_APPS = [
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
-    'django.contrib.sites',
+    "django.contrib.sites",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    
     # external apps
     "django_extensions",
     "debug_toolbar",
     "widget_tweaks",
-    'allauth',
-    'allauth.account',
-    'allauth.socialaccount',
+    "allauth",
+    "allauth.account",
+    "allauth.socialaccount",
     "django_filters",
     "django_htmx",
-
+    "template_partials",
     # project apps
     "tracker",
-
 ]
 
 SITE_ID = 1
@@ -62,7 +60,7 @@ ROOT_URLCONF = "finance_project.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [BASE_DIR / 'finance_project' / 'templates'],
+        "DIRS": [BASE_DIR / "finance_project" / "templates"],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -128,9 +126,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = "static/"
-STATICFILES_DIRS = [
-    BASE_DIR / 'static'
-]
+STATICFILES_DIRS = [BASE_DIR / "static"]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
@@ -143,5 +139,8 @@ INTERNAL_IPS = [
     # ...
 ]
 
-AUTH_USER_MODEL = 'tracker.User'
-LOGIN_REDIRECT_URL = 'index'
+AUTH_USER_MODEL = "tracker.User"
+LOGIN_REDIRECT_URL = "index"
+
+PAGE_SIZE = 5
+
