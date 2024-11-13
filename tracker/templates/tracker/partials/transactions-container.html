@@ -60,6 +60,7 @@
                         <tr hx-get="{% url 'get-transaction' %}?page={{ transactions.next_page_number }}"
                               hx-trigger="revealed"
                               hx-swap="afterend"
+                              hx-indicator="#spinner"
                               hx-include="#filterform">  
                       {% else %}
                         <tr>
@@ -130,3 +131,5 @@
         </form>
     </div>
 </div>
+
+<span id="spinner" class="loading loading-bars loading-md htmx-indicator"></span>
