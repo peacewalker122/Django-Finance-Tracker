@@ -17,4 +17,5 @@ urlpatterns = [
         name="delete-transaction",
     ),
     path("get-transaction/", views.get_transaction, name="get-transaction"),
+    path("transactions-chart/", views.transactions_chart, name="transactions-chart"),
 ]

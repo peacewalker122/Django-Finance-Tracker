@@ -1,0 +1,14 @@
+{% extends "tracker/base.html" %}
+
+{% block head_title %}
+Transactions Chart
+{% endblock %}
+
+{% block content %}
+
+<div class="relative overflow-x x-auto text-white" id="transaction-block">
+  {% include 'tracker/partials/charts-container.html' %}
+</div>
+
+
+{% endblock %}
